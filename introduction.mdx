@@ -1,0 +1,52 @@
+---
+title: "Introduction"
+description: "spot is a Spotify CLI for macOS. Search and play music from your terminal."
+---
+
+spot lets you control Spotify without leaving the terminal. Search for tracks, albums, artists, and playlists — then play them instantly. Playback controls like pause, skip, and volume work with pure AppleScript, so they never require internet access or steal window focus.
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Install spot from source in under a minute with Cargo
+  </Card>
+  <Card title="Authentication" icon="key" href="/authentication">
+    Connect your Spotify developer credentials to enable search
+  </Card>
+  <Card title="Play & Search" icon="play" href="/commands/play">
+    Search and play tracks, albums, artists, and playlists
+  </Card>
+  <Card title="Playback Controls" icon="sliders" href="/commands/controls">
+    Pause, skip, set volume, shuffle, and repeat from the terminal
+  </Card>
+</CardGroup>
+
+## How it works
+
+spot combines two distinct mechanisms:
+
+- **Search** uses the [Spotify Web API](https://developer.spotify.com/documentation/web-api) with the Client Credentials flow. This requires a client ID and secret, but no user login and no Premium subscription.
+- **Playback** uses AppleScript to send commands directly to the Spotify desktop app. Controls like `pause`, `next`, and `vol` need no API credentials at all.
+
+## Quick example
+
+```bash
+# Play the top track for a search query
+spot "bohemian rhapsody"
+
+# Play an album
+spot -a "abbey road"
+
+# Check what's playing
+spot now
+
+# Skip and adjust volume
+spot next
+spot vol 60
+```
+
+## Requirements
+
+- **macOS** — AppleScript is macOS-only
+- **Rust 1.83+** — to build from source
+- **Spotify desktop app** — must be installed and running for playback
+- **Spotify developer credentials** — required for search (free to create)

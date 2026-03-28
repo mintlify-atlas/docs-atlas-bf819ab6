@@ -1,0 +1,55 @@
+---
+title: "Search"
+description: "Search Spotify and display results in the terminal"
+---
+
+The `search` command queries Spotify and prints formatted results directly in your terminal. Unlike `spot <query>`, it does not play anything — it just shows what Spotify returns.
+
+## Basic usage
+
+```bash
+spot search <query>
+```
+
+Without any flags, `spot search` returns tracks.
+
+## Flags
+
+| Flag | Long form | Description |
+|------|-----------|-------------|
+| `-a` | `--album` | Search albums |
+| `-r` | `--artist` | Search artists |
+| `-p` | `--playlist` | Search playlists |
+
+Only one flag applies at a time. If no flag is given, the search defaults to tracks.
+
+## Examples
+
+```bash
+# Search tracks (default)
+spot search "bohemian rhapsody"
+
+# Search albums
+spot search -a "abbey road"
+
+# Search artists
+spot search -r "kendrick lamar"
+
+# Search playlists
+spot search -p "chill vibes"
+```
+
+## Output format
+
+Results are printed in your terminal with the name and a detail line. The detail content varies by type:
+
+- **Tracks** — artist names and album name (e.g. `Queen • A Night at the Opera`)
+- **Albums** — artist names and release year (e.g. `The Beatles (1969)`)
+- **Artists** — up to three genre tags, or `Artist` if none are available
+- **Playlists** — owner name and total track count (e.g. `by Spotify • 80 tracks`)
+
+Up to 20 results are returned per query.
+
+<Note>
+  `spot search` requires API credentials. Run `spot auth` to set up your Spotify client ID and secret before using this command.
+</Note>

@@ -1,0 +1,89 @@
+---
+title: "Installation"
+description: "Install spot on macOS using Cargo"
+---
+
+spot is built with Rust and installed directly from source. The entire process takes under a minute on a typical machine.
+
+<Note>
+  spot is macOS-only. Playback controls rely on AppleScript, which is not available on Linux or Windows.
+</Note>
+
+## Prerequisites
+
+Before you install, make sure you have the following:
+
+- **macOS** — required for AppleScript-based playback
+- **Rust 1.83 or later** — used to compile and install the binary
+- **Spotify desktop app** — must be installed for playback commands to work
+
+## Install spot
+
+<Steps>
+  <Step title="Install Rust">
+    If you don't have Rust installed, get it from [rustup.rs](https://rustup.rs). The installer sets up `rustc`, `cargo`, and the `~/.cargo/bin` directory automatically.
+
+    ```bash
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    ```
+
+    After installation, restart your terminal or run the following to update your current shell session:
+
+    ```bash
+    source "$HOME/.cargo/env"
+    ```
+
+    Verify the version:
+
+    ```bash
+    rustc --version
+    ```
+
+    The output should show `1.83` or later.
+  </Step>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/kayznari/spot.git
+    ```
+  </Step>
+  <Step title="Build and install">
+    ```bash
+    cd spot && cargo install --path .
+    ```
+
+    Cargo compiles the binary and installs it to `~/.cargo/bin/spot`.
+  </Step>
+  <Step title="Verify the installation">
+    ```bash
+    spot --version
+    ```
+
+    If the command is not found, your shell's `PATH` may not include `~/.cargo/bin`. See the note below.
+  </Step>
+</Steps>
+
+## PATH configuration
+
+Cargo installs binaries to `~/.cargo/bin`. If `spot` is not found after installation, add that directory to your `PATH`.
+
+For **zsh** (the default macOS shell), add the following to `~/.zshrc`:
+
+```bash
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+
+For **bash**, add the same line to `~/.bash_profile` or `~/.bashrc`.
+
+Then reload your shell:
+
+```bash
+source ~/.zshrc
+```
+
+## Next steps
+
+With spot installed, connect your Spotify developer credentials to enable search.
+
+<Card title="Authentication" icon="key" href="/authentication">
+  Connect your Spotify developer credentials to enable search
+</Card>

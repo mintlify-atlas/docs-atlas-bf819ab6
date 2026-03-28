@@ -1,0 +1,80 @@
+---
+title: "Playback controls"
+description: "Control Spotify playback from the terminal"
+---
+
+Playback controls send commands directly to the Spotify desktop app using AppleScript. They work instantly without any network requests, and they never steal window focus.
+
+<Info>
+  These commands require the Spotify desktop app to be open and running. They do not require API credentials or a Spotify Premium subscription.
+</Info>
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `spot now` | Show the currently playing track with a progress bar |
+| `spot pause` | Pause playback |
+| `spot resume` | Resume playback |
+| `spot toggle` | Toggle between play and pause |
+| `spot next` | Skip to the next track |
+| `spot prev` | Skip to the previous track |
+| `spot vol [0-100]` | Set volume to a level, or show current volume if no argument |
+| `spot shuffle [on\|off]` | Enable or disable shuffle, or show current state if no argument |
+| `spot repeat [on\|off]` | Enable or disable repeat, or show current state if no argument |
+
+## Now playing
+
+```bash
+spot now
+```
+
+Displays the current track name, artist, album, and a progress bar showing how far through the track you are. All track info is fetched in a single AppleScript call.
+
+## Pause, resume, and toggle
+
+```bash
+spot pause
+spot resume
+spot toggle
+```
+
+`spot pause` and `spot resume` print a confirmation line. `spot toggle` switches state silently.
+
+## Skip tracks
+
+```bash
+spot next
+spot prev
+```
+
+After skipping, spot waits 200 ms for Spotify to update, then prints the new track name and artist.
+
+## Volume
+
+```bash
+spot vol        # show current volume
+spot vol 75     # set volume to 75%
+```
+
+The volume argument is clamped to the range 0–100.
+
+## Shuffle
+
+```bash
+spot shuffle        # show current shuffle state
+spot shuffle on     # enable shuffle
+spot shuffle off    # disable shuffle
+```
+
+You can also pass `true`/`false` or `1`/`0` in place of `on`/`off`.
+
+## Repeat
+
+```bash
+spot repeat        # show current repeat state
+spot repeat on     # enable repeat
+spot repeat off    # disable repeat
+```
+
+Repeat is also set automatically by play commands: `spot play -a` turns repeat on. All other play commands — `spot play -s`, `spot <query>`, and `spot play <query>` — turn repeat off.

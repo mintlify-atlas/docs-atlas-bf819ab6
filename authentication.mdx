@@ -1,0 +1,91 @@
+---
+title: "Authentication"
+description: "Connect your Spotify developer credentials to enable search"
+---
+
+spot uses two separate mechanisms, and only one of them requires credentials.
+
+- **Playback controls** — `pause`, `resume`, `next`, `prev`, `vol`, `shuffle`, `repeat` — use AppleScript to communicate with the Spotify desktop app directly. They require no credentials and no internet connection.
+- **Search** — `spot search` and `spot <query>` — use the [Spotify Web API](https://developer.spotify.com/documentation/web-api) with the Client Credentials flow. This requires a Client ID and Client Secret from a Spotify developer app.
+
+<Note>
+  The Client Credentials flow authenticates your app, not your Spotify account. This means search works without Premium and without logging in, but user-specific features like liked songs and private playlists are not available.
+</Note>
+
+## Create a Spotify developer app
+
+<Steps>
+  <Step title="Open the Spotify developer dashboard">
+    Go to [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard) and log in with your Spotify account.
+  </Step>
+  <Step title="Create an app">
+    Create a new app. You can use any name and description — spot only needs the credentials, not any specific app settings. No redirect URI configuration is required for the Client Credentials flow.
+  </Step>
+  <Step title="Copy your credentials">
+    From your app's settings page, copy the **Client ID** and **Client Secret**. You'll enter these in the next step.
+  </Step>
+  <Step title="Run spot auth">
+    Run the interactive setup command:
+
+    ```bash
+    spot auth
+    ```
+
+    spot will prompt you for each credential:
+
+    ```
+      ♫ Spotify API Credentials Setup
+
+      Create an app at https://developer.spotify.com/dashboard
+      to get your Client ID and Client Secret.
+
+      Client ID: <your-client-id>
+      Client Secret: <your-client-secret>
+
+      Validating credentials... valid!
+
+      ✓ Credentials saved. You're ready to go!
+    ```
+
+    spot validates your credentials against the Spotify API before saving. If validation fails, nothing is written to disk — fix your credentials and run `spot auth` again.
+  </Step>
+</Steps>
+
+## Where credentials are stored
+
+Credentials are saved to `~/.config/spot/config.toml`:
+
+```toml
+client_id = "your-client-id"
+client_secret = "your-client-secret"
+```
+
+## Verify your credentials
+
+Run the following to confirm your credentials are configured and valid:
+
+```bash
+spot auth --status
+```
+
+Example output when credentials are working:
+
+```
+  Client ID: abcd…ef12
+✓ Credentials are valid.
+```
+
+Example output when credentials are missing or invalid:
+
+```
+✗ No credentials configured.
+  Run spot auth to set up.
+```
+
+## Token caching
+
+spot caches the API access token to avoid an HTTP round-trip on every command. The token is stored at `~/.config/spot/token.json` and expires after 1 hour, matching the TTL that Spotify issues for Client Credentials tokens. spot refreshes the token automatically when it expires — no action is required on your part.
+
+<Tip>
+  If you rotate your Client ID or Secret in the Spotify dashboard, run `spot auth` again to update your credentials. The cached token will be replaced on the next search.
+</Tip>

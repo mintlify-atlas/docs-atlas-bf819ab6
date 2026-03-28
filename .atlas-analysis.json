@@ -1,0 +1,70 @@
+{
+  "projectType": "cli-tool",
+  "projectName": "spot",
+  "projectDescription": "A Rust-powered Spotify CLI for macOS that lets you search and control music playback directly from the terminal.",
+  "theme": "palm",
+  "primaryColor": "#1c1414",
+  "lightColor": null,
+  "darkColor": null,
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "authentication"
+            ]
+          },
+          {
+            "group": "Commands",
+            "pages": [
+              "commands/play",
+              "commands/search",
+              "commands/controls",
+              "commands/aliases"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/config-file",
+              "configuration/troubleshooting"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Smart play with auto-detection of artist, album, or track",
+    "Spotify Web API search (no Premium required)",
+    "AppleScript-based playback control (no focus stealing)",
+    "Concurrent multi-type search using tokio",
+    "Custom aliases for frequent searches",
+    "Full playback controls: pause, resume, next, prev, volume, shuffle, repeat",
+    "Token caching with 1-hour TTL",
+    "No subcommand needed — `spot <query>` just works"
+  ],
+  "publicApiSurface": [
+    "spot <query>",
+    "spot play [-a | -s] <query>",
+    "spot search [-a | -r | -p] <query>",
+    "spot now",
+    "spot pause",
+    "spot resume",
+    "spot toggle",
+    "spot next",
+    "spot prev",
+    "spot vol [0-100]",
+    "spot shuffle [on|off]",
+    "spot repeat [on|off]",
+    "spot auth [--status]",
+    "spot alias add <name> <query>",
+    "spot alias rm <name>",
+    "spot alias ls"
+  ]
+}

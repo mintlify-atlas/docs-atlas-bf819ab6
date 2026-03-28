@@ -1,0 +1,90 @@
+---
+title: "Configuration file"
+description: "Manage spot's configuration and credentials"
+---
+
+spot stores its configuration in a single TOML file. You can edit it directly or use `spot auth` and `spot alias` commands to manage it interactively.
+
+## Config file location
+
+```
+~/.config/spot/config.toml
+```
+
+The file is created automatically when you first run `spot auth`. If the file doesn't exist, spot uses empty defaults.
+
+## File format
+
+```toml
+client_id = "your_client_id_here"
+client_secret = "your_client_secret_here"
+
+[aliases]
+white-album = "The Beatles"
+dsotm = "The Dark Side of the Moon"
+chill = "lo-fi beats"
+```
+
+### Fields
+
+| Field | Description |
+|---|---|
+| `client_id` | Your Spotify app's client ID |
+| `client_secret` | Your Spotify app's client secret |
+| `[aliases]` | Key-value alias mappings (optional) |
+
+**`client_id`** and **`client_secret`** come from a Spotify app you create at [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard). Both are required for search commands (`spot search`, `spot <query>`). Playback controls (`spot pause`, `spot next`, `spot vol`, etc.) use AppleScript and do not require credentials.
+
+**`[aliases]`** maps short names to full search queries. Each entry is `alias-name = "search query"`. When you run `spot <alias>`, spot substitutes the full query before searching.
+
+<Note>
+  Run `spot auth` to set credentials interactively instead of editing the file directly. Run `spot auth --status` to verify your credentials are valid.
+</Note>
+
+## Token cache
+
+spot caches the Spotify API access token to avoid an HTTP round-trip on every command.
+
+| Property | Value |
+|---|---|
+| Location | `~/.config/spot/token.json` |
+| TTL | 1 hour (auto-refreshed) |
+
+The token is refreshed automatically when it expires. Do not edit `token.json` manually — if you encounter token errors, delete the file and run `spot auth` again.
+
+## Managing credentials
+
+<Steps>
+  <Step title="Create a Spotify app">
+    Go to [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard) and create a new app to get your Client ID and Client Secret.
+  </Step>
+  <Step title="Run spot auth">
+    ```bash
+    spot auth
+    ```
+    spot prompts for your Client ID and Client Secret, validates them against the Spotify API, and saves the config on success.
+  </Step>
+  <Step title="Verify credentials">
+    ```bash
+    spot auth --status
+    ```
+    This prints your masked Client ID and confirms whether the credentials can obtain a valid token.
+  </Step>
+</Steps>
+
+## Managing aliases
+
+Aliases let you create short names for frequent searches.
+
+```bash
+# Add an alias
+spot alias add white-album "The Beatles"
+
+# List all aliases
+spot alias ls
+
+# Remove an alias
+spot alias rm white-album
+```
+
+Aliases are stored under `[aliases]` in `config.toml` and resolved before search, so `spot white-album` plays "The Beatles".

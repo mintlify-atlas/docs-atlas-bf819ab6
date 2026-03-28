@@ -1,0 +1,105 @@
+---
+title: "Aliases"
+description: "Create shortcuts for frequent searches"
+---
+
+Aliases let you define short names for queries you use often. When you run `spot <name>`, spot checks your aliases first — if a match exists, the alias value replaces the query before any search happens.
+
+This is particularly useful for working around smart play's exact-match requirement. `spot beatles` won't match "The Beatles", but an alias will.
+
+## Storage
+
+Aliases are stored in `~/.config/spot/config.toml` under an `[aliases]` section:
+
+```toml
+client_id = "your-client-id"
+client_secret = "your-client-secret"
+
+[aliases]
+beatles = "The Beatles"
+dsotm = "The Dark Side of the Moon"
+chill = "lo-fi beats"
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `spot alias add <name> <query>` | Add or update an alias |
+| `spot alias rm <name>` | Remove an alias |
+| `spot alias ls` | List all configured aliases |
+
+### Adding an alias
+
+```bash
+spot alias add <name> <query>
+```
+
+The name is a single word. The query can contain spaces — wrap it in quotes.
+
+### Removing an alias
+
+```bash
+spot alias rm <name>
+```
+
+### Listing aliases
+
+```bash
+spot alias ls
+```
+
+Prints all aliases sorted alphabetically, showing the name and its resolved query.
+
+## Using an alias
+
+Once an alias is set, use it like any other play query:
+
+```bash
+spot <name>
+```
+
+spot resolves the alias before searching, so the full query reaches Spotify.
+
+## Examples
+
+```bash
+# Add an alias for a common search
+spot alias add chill "lo-fi beats"
+
+# Use the alias — plays "lo-fi beats"
+spot chill
+
+# Add an alias to work around exact-match limitation
+spot alias add beatles "The Beatles"
+
+# Use it — resolves to "The Beatles" before searching
+spot beatles
+
+# A longer alias
+spot alias add dsotm "The Dark Side of the Moon"
+spot dsotm
+
+# List everything configured
+spot alias ls
+
+# Remove an alias you no longer need
+spot alias rm chill
+```
+
+<Note>
+  Aliases are resolved before search in both `spot <query>` and `spot play <query>`. The resolved query is passed to Spotify's API exactly as written in your config, so make sure it matches how Spotify knows the artist, album, or track.
+</Note>
+
+## Exact matching and aliases
+
+Smart play matches on exact names (case-insensitive). If your query doesn't match a Spotify name exactly, spot falls through to the top track result, which may not be what you wanted.
+
+Aliases are the recommended way to handle this:
+
+```bash
+spot alias add beatles "The Beatles"
+spot beatles   # resolves to "The Beatles" → exact artist match → plays artist
+```
+
+Without the alias, `spot beatles` would not find an exact artist match and would instead play the top track result for "beatles".

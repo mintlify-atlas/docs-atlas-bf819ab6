@@ -1,0 +1,88 @@
+---
+title: "Play"
+description: "Search and play music from the terminal"
+---
+
+The `spot` command plays music with a single argument — no subcommand required. Type a query and spot searches Spotify and starts playing immediately.
+
+## Basic usage
+
+```bash
+spot <query>
+```
+
+Anything that isn't a recognized subcommand is treated as a play query. Without a flag, spot searches for an **artist** matching your query and plays their top songs. Use `-a` or `-s` to target an album or track instead.
+
+You can also invoke the `play` subcommand explicitly:
+
+```bash
+spot play <query>
+spot play -a <query>
+spot play -s <query>
+```
+
+## Flags
+
+| Flag | Description |
+|------|-------------|
+| `-a` | Search for an album and play it. Enables repeat automatically. |
+| `-s` | Search for a track and play it. |
+
+You can pass `-a` and `-s` directly to `spot` without the `play` subcommand:
+
+```bash
+spot -a "abbey road"     # same as: spot play -a "abbey road"
+spot -s "come together"  # same as: spot play -s "come together"
+```
+
+spot's argument preprocessor inserts `play` automatically when `-a` or `-s` is the first argument.
+
+<Note>
+  The `play` command only supports `-a` (album) and `-s` (track/song). To search by artist name, use `spot <query>` directly (no flags). To search playlists, use `spot search -p <query>` — playlist playback is not supported via `spot play`.
+</Note>
+
+## Default behavior (no flags)
+
+When you run `spot <query>` without any flags, spot searches Spotify for an **artist** matching your query and plays the first result's top songs. Repeat is turned off.
+
+```bash
+spot "Radiohead"         # plays Radiohead's top songs
+spot "bohemian rhapsody" # plays the top artist result for this query
+```
+
+<Tip>
+  To play a specific track without flags, use `spot -s "track name"` or `spot search "track name"` to find the right one first.
+</Tip>
+
+## Examples
+
+```bash
+# Play an artist's top songs (default behavior)
+spot "Radiohead"
+
+# Play a specific album
+spot -a "abbey road"
+
+# Play a specific track
+spot -s "come together"
+
+# Explicit play subcommand
+spot play "Radiohead"
+spot play -a "abbey road"
+spot play -s "come together"
+```
+
+<Info>
+  Playback uses AppleScript to control the Spotify desktop app directly. It does not steal focus and does not require a Spotify Premium subscription.
+</Info>
+
+## Aliases
+
+Before searching, spot checks `~/.config/spot/config.toml` for an alias matching your query. If one exists, the alias value replaces the query before the search runs.
+
+```bash
+spot alias add beatles "The Beatles"
+spot beatles   # resolves to "The Beatles", then searches for that artist
+```
+
+See [Aliases](/commands/aliases) for full documentation.

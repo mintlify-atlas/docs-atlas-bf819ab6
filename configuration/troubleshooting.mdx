@@ -1,0 +1,77 @@
+---
+title: "Troubleshooting"
+description: "Common issues and how to fix them"
+---
+
+<Note>
+  Start with `spot auth --status` as a first diagnostic step. It confirms whether your credentials are configured and valid, which is the root cause of most issues.
+</Note>
+
+<AccordionGroup>
+  <Accordion title='"spot: command not found"'>
+    The `~/.cargo/bin` directory is not in your `PATH`. Add the following line to your shell profile (`~/.zshrc`, `~/.bashrc`, or equivalent):
+
+    ```bash
+    export PATH="$HOME/.cargo/bin:$PATH"
+    ```
+
+    Then reload your shell:
+
+    ```bash
+    source ~/.zshrc
+    ```
+  </Accordion>
+
+  <Accordion title='Search fails or "credentials not found"'>
+    spot cannot find your Spotify API credentials. Run the interactive setup:
+
+    ```bash
+    spot auth
+    ```
+
+    You'll be prompted for your Client ID and Client Secret from [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard). spot validates and saves them on success.
+  </Accordion>
+
+  <Accordion title='"Spotify is not running"'>
+    spot uses AppleScript to control the Spotify desktop app. The app must be open before running playback commands.
+
+    Open the Spotify desktop app, then retry your command.
+
+    <Info>
+      Controls like `spot pause`, `spot next`, and `spot vol` all require the Spotify desktop app to be running. Search commands (`spot search`) do not.
+    </Info>
+  </Accordion>
+
+  <Accordion title="Smart play picks the wrong type">
+    Smart play (`spot <query>`) uses exact, case-insensitive name matching to decide whether to play a track, album, or artist. A partial query won't match.
+
+    For example, `spot beatles` won't match "The Beatles" because the names differ. Create an alias to map the short name to the full query:
+
+    ```bash
+    spot alias add beatles "The Beatles"
+    ```
+
+    Then `spot beatles` resolves to "The Beatles" before searching.
+  </Accordion>
+
+  <Accordion title="No liked songs or private playlists">
+    spot uses the Client Credentials OAuth flow, which authenticates your app but not your Spotify account. This means user-specific data — liked songs, private playlists, listening history — is not accessible.
+
+    This is a known limitation of the Client Credentials flow. There is no workaround without implementing user authorization (OAuth Authorization Code flow), which spot does not support.
+  </Accordion>
+
+  <Accordion title="Token errors or expired credentials">
+    If spot reports a token error or your credentials appear invalid after previously working, the cached token file may be stale or corrupt. Delete it and re-authenticate:
+
+    ```bash
+    rm ~/.config/spot/token.json
+    spot auth
+    ```
+
+    spot will fetch a fresh token and save it on the next command.
+  </Accordion>
+
+  <Accordion title="spot doesn't work on Linux or Windows">
+    spot is macOS-only. Playback and controls rely on AppleScript (`osascript`), which is exclusive to macOS. There is no Linux or Windows support.
+  </Accordion>
+</AccordionGroup>
